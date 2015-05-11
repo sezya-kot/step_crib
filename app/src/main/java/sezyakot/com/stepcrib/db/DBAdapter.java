@@ -14,6 +14,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import sezyakot.com.stepcrib.models.Question;
+
 public class DBAdapter extends SQLiteOpenHelper {
 
 	private static final String TAG = DBAdapter.class.getSimpleName();
@@ -173,28 +175,27 @@ public class DBAdapter extends SQLiteOpenHelper {
 		return localCursor;
 	}
 
-	public List<String> getAllQuestions() {
-		SQLiteDatabase db = getReadableDatabase();
-		Cursor cursor = db.rawQuery(String.format("select %s from %s", QUEST_TEXT, TAB_QUESTIONS), null);
-		List<String> list = new ArrayList<>();
-		if (cursor.moveToFirst()) {
-			while (cursor.moveToNext()) {
-				list.add(cursor.getString(cursor.getColumnIndex(QUEST_TEXT)));
-			}
-		}
-		db.close();
-		return list;
+	public List<Question> getAllQuestions() {
+		return getQuestions(null);
 	}
 
-	public List<String> getQuestions(String token) {
+	public List<Question> getQuestions(String token) {
 		SQLiteDatabase db = getReadableDatabase();
-		String query = String.format("SELECT %s FROM %s WHERE %s LIKE \"%s\"", QUEST_TEXT, TAB_QUESTIONS, QUEST_TEXT, "%" + token + "%");
-		Cursor cursor = db.rawQuery(query, null);
-		List<String> list = new ArrayList<>();
-		if (cursor.moveToFirst()) {
-			while (cursor.moveToNext()) {
-				list.add(cursor.getString(cursor.getColumnIndex(QUEST_TEXT)));
-			}
+		String query;
+		if (token != null && token.length() > 0) {
+			query = String.format("SELECT * FROM %s WHERE %s LIKE \"%s\"", TAB_QUESTIONS, QUEST_TEXT, "%" + token + "%");
+		} else {
+			query = String.format("SELECT * FROM %s ", TAB_QUESTIONS);
+		}
+		Cursor c = db.rawQuery(query, null);
+		List<Question> list = new ArrayList<>();
+		while (c.moveToNext()) {
+			Question q = new Question();
+			q.setId(c.getInt(c.getColumnIndex(QUEST_ID)));
+			q.setText(c.getString(c.getColumnIndex(QUEST_TEXT)));
+			q.setSubjectId(c.getInt(c.getColumnIndex(QUEST_SUBJ_ID)));
+			q.setSerialNumber(c.getInt(c.getColumnIndex(QUEST_SERNO)));
+			list.add(q);
 		}
 		db.close();
 		return list;
