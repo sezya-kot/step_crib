@@ -98,13 +98,11 @@ public class SearchFragment extends Fragment implements TextWatcher {
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		if (s.length() >= 3) {
-			if (mSearchToken != null && mSearchToken.length() > 0) {
-				mSearchTokenStr = mSearchToken.getText().toString();
-				mAdapter.getFilter().filter(mSearchTokenStr);
-			} else {
-				mAdapter.setData(mDBAdapter.getAllQuestions());
-			}
+		if (mSearchToken != null && mSearchToken.length() > 0) {
+			mSearchTokenStr = mSearchToken.getText().toString();
+			mAdapter.getFilter().filter(mSearchTokenStr);
+		} else {
+			mAdapter.setData(mDBAdapter.getAllQuestions());
 		}
 	}
 

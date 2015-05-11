@@ -149,7 +149,7 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
-			if (results != null && results.values != null && results.count != 0) {
+			if (results != null && results.values != null) {
 				mList.clear();
 				mList.addAll((List<? extends Question>) results.values);
 				notifyDataSetChanged();
