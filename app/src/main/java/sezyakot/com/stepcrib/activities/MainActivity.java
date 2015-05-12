@@ -12,7 +12,7 @@ import sezyakot.com.stepcrib.fragments.SearchFragment;
 
 public class MainActivity extends ActionBarActivity {
 
-	public static final String TAG = MainActivity.class.getSimpleName();
+	public final String TAG = getClass().getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
