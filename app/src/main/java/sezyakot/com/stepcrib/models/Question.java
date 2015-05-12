@@ -13,6 +13,16 @@ public class Question {
 	private int mSubjectId;
 	private int mSerialNumber;
 
+	public String getCorrectAnswer() {
+		return mCorrectAnswer;
+	}
+
+	public void setCorrectAnswer(String correctAnswer) {
+		mCorrectAnswer = correctAnswer;
+	}
+
+	private String mCorrectAnswer;
+
 	public int getId() {
 		return mId;
 	}

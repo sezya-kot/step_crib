@@ -93,21 +93,23 @@ public class SearchFragment extends Fragment implements TextWatcher {
 
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		Log.d(TAG, "beforeTextChanged(): " + s);
 
 	}
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		Log.d(TAG, "onTextChanged(): " + s);
 		if (mSearchToken != null && mSearchToken.length() > 0) {
 			mSearchTokenStr = mSearchToken.getText().toString();
 			mAdapter.getFilter().filter(mSearchTokenStr);
 		} else {
-			mAdapter.setData(mDBAdapter.getAllQuestions());
+			mAdapter.refresh();
 		}
 	}
 
 	@Override
 	public void afterTextChanged(Editable s) {
-
+		Log.d(TAG, "afterTextChanged(): " + s);
 	}
 }

@@ -185,7 +185,7 @@ public class DBAdapter extends SQLiteOpenHelper {
 		if (token != null && token.length() > 0) {
 			query = String.format("SELECT * FROM %s WHERE %s LIKE \"%s\"", TAB_QUESTIONS, QUEST_TEXT, "%" + token + "%");
 		} else {
-			query = String.format("SELECT * FROM %s ", TAB_QUESTIONS);
+			query = String.format("SELECT * FROM %s, %s WHERE %s.%s=%s.%s AND %s.%s=1", TAB_QUESTIONS, TAB_ANSWERS, TAB_ANSWERS, ANSW_QUEST_ID, TAB_QUESTIONS, QUEST_ID, TAB_ANSWERS, ANSW_IS_CORRECT);
 		}
 		Cursor c = db.rawQuery(query, null);
 		List<Question> list = new ArrayList<>();
@@ -195,6 +195,8 @@ public class DBAdapter extends SQLiteOpenHelper {
 			q.setText(c.getString(c.getColumnIndex(QUEST_TEXT)));
 			q.setSubjectId(c.getInt(c.getColumnIndex(QUEST_SUBJ_ID)));
 			q.setSerialNumber(c.getInt(c.getColumnIndex(QUEST_SERNO)));
+			q.setCorrectAnswer(c.getString(c.getColumnIndex(ANSW_TEXT)));
+
 			list.add(q);
 		}
 		db.close();

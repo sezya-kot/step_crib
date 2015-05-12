@@ -20,6 +20,7 @@
         />
     <TextView
         android:id="@+id/id"
+        android:textColor="@color/red"
         android:textSize="12sp"
         android:paddingLeft="10dp"
         android:gravity="left|center_vertical"

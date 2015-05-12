@@ -2,7 +2,6 @@ package sezyakot.com.stepcrib.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import sezyakot.com.stepcrib.models.Question;
 public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapter.ViewHolder> implements Filterable {
 
 	private static final String TAG = BaseQuestionAdapter.class.getSimpleName();
+	private final Context mCtx;
 	private LayoutInflater mInflater;
 	private List<Question> mList = Collections.emptyList();
 	private List<Question> mOriginList;
@@ -37,15 +37,21 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 		return mFilter;
 	}
 
+	public void refresh() {
+		mList = new ArrayList<>(mOriginList);
+		notifyDataSetChanged();
+	}
+
 	public interface OnItemClickListener {
 
 		public void onItemClick(View v, int position);
 	}
 
 	public BaseQuestionAdapter(final Context ctx, List<Question> questions) {
+		mCtx = ctx;
 		mInflater = LayoutInflater.from(ctx);
 		mList = questions;
-		mOriginList = questions;
+		mOriginList = new ArrayList<>(questions);
 	}
 
 	public void setOnItemClickListener(OnItemClickListener listener) {
@@ -62,9 +68,9 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		String text = mList.get(position).getText();
-		int id = mList.get(position).getId();
+		String answer = mList.get(position).getCorrectAnswer();
 		holder.name.setText(text);
-		holder.id.setText("ID: " + id);
+		holder.answer.setText(mCtx.getString(R.string.answer) + answer);
 	}
 
 	public void setData(List<Question> list) {
@@ -81,12 +87,12 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 	class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		TextView name;
-		TextView id;
+		TextView answer;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
 			name = (TextView) itemView.findViewById(R.id.question);
-			id = (TextView) itemView.findViewById(R.id.id);
+			answer = (TextView) itemView.findViewById(R.id.id);
 			itemView.setOnClickListener(this);
 		}
 
