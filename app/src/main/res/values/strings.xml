@@ -4,4 +4,6 @@
     <string name="action_settings">Settings</string>
     <string name="write_question_hint">Start write question</string>
     <string name="answer">"Answer: "</string>
+    <string name="hide_keyboard">Hide</string>
+    <string name="clear">Clear</string>
 </resources>

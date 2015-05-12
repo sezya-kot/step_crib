@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
+              android:background="#fffff3b2"
               android:layout_height="match_parent">
 
     <com.wrapp.floatlabelededittext.FloatLabeledEditText
@@ -14,6 +15,7 @@
             android:layout_toLeftOf="@+id/search"
             android:layout_gravity="center"
             android:inputType="text"
+            android:imeOptions="actionDone"
             android:hint="@string/write_question_hint"
             android:maxLines="1"
             />

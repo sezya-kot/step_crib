@@ -128,8 +128,9 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 //				String constraint = constraint.toString();
 				List<Question> values = mOriginList;
 				int count = values.size();
-				String filterString1 = constraint.toString().toLowerCase();
-				String filterString2 = constraint.toString().toLowerCase().replace("\u0456", "\u0069");
+				String filterString1 = constraint.toString().toLowerCase().trim();
+				String filterString2 = constraint.toString().toLowerCase().replace("\u0456", "\u0069").trim();
+				String filterString3 = constraint.toString().toLowerCase().replace("\u0456", "\u0069").trim();
 				filterString2 = filterString2.replace("\u002D", "\u2013");
 				filterString2 = filterString2.replace("\u0027", "\u2019");
 
@@ -141,9 +142,8 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 					String orig = data.getText().toLowerCase();
 //					Log.v(TAG, "For ID: " + data.getId() + " isContain: " + data.getText().toLowerCase().contains(filterString));
 					//Here is where you compare the constraint(title/address) with values in your JobsGetSet, or any other logic
-					if (orig.contains(filterString1) ||
-						orig.contains(filterString2)
-						) {
+					if (orig.contains(filterString1) || orig.contains(filterString2) || orig.contains(filterString3))
+					{
 						newValues.add(data);
 					}
 				}

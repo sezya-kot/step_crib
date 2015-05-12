@@ -1,5 +1,6 @@
 package sezyakot.com.stepcrib.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -44,6 +49,7 @@ public class SearchFragment extends Fragment implements TextWatcher {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.search_fragment, container, false);
 		setRetainInstance(true);
+		setHasOptionsMenu(true);
 		ButterKnife.inject(this, v);
 		return v;
 	}
@@ -100,6 +106,10 @@ public class SearchFragment extends Fragment implements TextWatcher {
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		Log.d(TAG, "onTextChanged(): " + s);
+		doSearch();
+	}
+
+	private void doSearch() {
 		if (mSearchToken != null && mSearchToken.length() > 0) {
 			mSearchTokenStr = mSearchToken.getText().toString();
 			mAdapter.getFilter().filter(mSearchTokenStr);
@@ -111,5 +121,33 @@ public class SearchFragment extends Fragment implements TextWatcher {
 	@Override
 	public void afterTextChanged(Editable s) {
 		Log.d(TAG, "afterTextChanged(): " + s);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_main, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+
+		if (item.getItemId() == R.id.clear) {
+			mSearchToken.setText("");
+			mSearchTokenStr = "";
+			doSearch();
+		}
+		if (item.getItemId() == R.id.hide_keyboard) {
+			if (getActivity().getCurrentFocus() != null) {
+				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+			}
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 }
