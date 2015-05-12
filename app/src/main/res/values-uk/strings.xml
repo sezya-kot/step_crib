@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Крок шпора</string>
+
+    <string name="write_question_hint">Ваше питання</string>
+    <string name="answer">"Відповідь: "</string>
+</resources>

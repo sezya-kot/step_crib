@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Крок шпора</string>
+    <string name="app_name">Шаг шпора</string>
 
     <string name="write_question_hint">Ваш вопрос</string>
     <string name="answer">"Ответ: "</string>
