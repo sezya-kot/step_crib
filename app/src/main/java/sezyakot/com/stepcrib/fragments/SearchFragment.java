@@ -19,12 +19,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.wrapp.floatlabelededittext.FloatLabeledEditText;
+
 import java.io.IOException;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import sezyakot.com.stepcrib.R;
+import sezyakot.com.stepcrib.activities.MainActivity;
 import sezyakot.com.stepcrib.adapters.BaseQuestionAdapter;
 import sezyakot.com.stepcrib.db.DBAdapter;
 import sezyakot.com.stepcrib.models.Question;
@@ -32,11 +35,12 @@ import sezyakot.com.stepcrib.models.Question;
 /**
  * Created by cat on 5/8/2015.
  */
-public class SearchFragment extends Fragment implements TextWatcher {
+public class SearchFragment extends Fragment implements TextWatcher, BaseQuestionAdapter.IFiltering {
 
 	private static final String TAG = SearchFragment.class.getSimpleName();
 	private static final String SEARCH_TOKEN = "search_token";
 	@InjectView(R.id.questions) RecyclerView mRecyclerView;
+	@InjectView(R.id.hint_search_token) FloatLabeledEditText mHint;
 	@InjectView(R.id.search_token) EditText mSearchToken;
 
 	DBAdapter mDBAdapter = null;
@@ -79,6 +83,7 @@ public class SearchFragment extends Fragment implements TextWatcher {
 		mRecyclerView.setLayoutManager(llm);
 
 		mAdapter = new BaseQuestionAdapter(getActivity(), questions);
+		mAdapter.setFilterListener(this);
 //		mAdapter.setOnItemClickListener(this);
 
 		mRecyclerView.setAdapter(mAdapter);
@@ -149,5 +154,14 @@ public class SearchFragment extends Fragment implements TextWatcher {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onFinished(int count) {
+		if (count == 4007) {
+	 	    mHint.setHint(getString(R.string.write_question_hint));
+	 	} else {
+			mHint.setHint("Found: " + count);
+		}
 	}
 }

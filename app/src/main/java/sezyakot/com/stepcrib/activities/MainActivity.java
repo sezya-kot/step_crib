@@ -6,8 +6,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import sezyakot.com.stepcrib.R;
+import sezyakot.com.stepcrib.adapters.BaseQuestionAdapter;
 import sezyakot.com.stepcrib.fragments.SearchFragment;
 
 
@@ -15,11 +17,13 @@ public class MainActivity extends ActionBarActivity {
 
 	public final String TAG = getClass().getSimpleName();
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
 		setSupportActionBar(toolbar);
 
 		Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -41,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
 //			Log.d(TAG, DatabaseAdapter.SUBJ_NAME + " is " + l);
 //		}
 	}
+
 
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {

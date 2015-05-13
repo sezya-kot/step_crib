@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import sezyakot.com.stepcrib.R;
+import sezyakot.com.stepcrib.fragments.SearchFragment;
 import sezyakot.com.stepcrib.models.Question;
 
 /**
@@ -28,6 +29,20 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 	private List<Question> mOriginList;
 	protected OnItemClickListener mListener;
 	private Filter mFilter;
+	protected IFiltering mFilterListener;
+
+	public void setFilterListener(IFiltering listener) {
+		if (listener instanceof IFiltering) {
+			mFilterListener = (IFiltering) listener;
+		} else {
+			throw new InstantiationError();
+		}
+	}
+
+	public interface IFiltering {
+
+		public void onFinished(int count);
+	}
 
 	@Override
 	public Filter getFilter() {
@@ -39,6 +54,7 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 
 	public void refresh() {
 		mList = new ArrayList<>(mOriginList);
+		if (mFilterListener != null) mFilterListener.onFinished(mList.size());
 		notifyDataSetChanged();
 	}
 
@@ -47,11 +63,12 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 		public void onItemClick(View v, int position);
 	}
 
-	public BaseQuestionAdapter(final Context ctx, List<Question> questions) {
+	public BaseQuestionAdapter(final Context ctx, List<Question> questions) throws InstantiationError {
 		mCtx = ctx;
 		mInflater = LayoutInflater.from(ctx);
 		mList = questions;
 		mOriginList = new ArrayList<>(questions);
+
 	}
 
 	public void setOnItemClickListener(OnItemClickListener listener) {
@@ -158,6 +175,7 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 			if (results != null && results.values != null) {
 				mList.clear();
 				mList.addAll((List<? extends Question>) results.values);
+				mFilterListener.onFinished(results.count);
 				notifyDataSetChanged();
 			}
 		}
