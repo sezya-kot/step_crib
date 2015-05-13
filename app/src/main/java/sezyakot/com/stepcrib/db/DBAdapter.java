@@ -43,10 +43,19 @@ public class DBAdapter extends SQLiteOpenHelper {
 	private final Context mCtx;
 	private SQLiteDatabase mDatabase;
 
-	public DBAdapter(Context paramContext) {
+	private volatile static DBAdapter sInstance;
+
+	private DBAdapter(Context paramContext) {
 		super(paramContext, DB_NAME, null, DATABASE_VERSION);
 		this.mCtx = paramContext;
 		this.DB_PATH = (paramContext.getFilesDir().getParent() + "/databases/");
+	}
+
+	public static synchronized final DBAdapter getInstance(final Context ctx) {
+		if (sInstance == null) {
+			sInstance = new DBAdapter(ctx);
+		}
+		return sInstance;
 	}
 
 	/**
@@ -199,6 +208,7 @@ public class DBAdapter extends SQLiteOpenHelper {
 
 			list.add(q);
 		}
+		c.close();
 		db.close();
 		return list;
 	}

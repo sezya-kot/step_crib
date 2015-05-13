@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
 
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
@@ -35,7 +36,7 @@ import sezyakot.com.stepcrib.models.Question;
 /**
  * Created by cat on 5/8/2015.
  */
-public class SearchFragment extends Fragment implements TextWatcher, BaseQuestionAdapter.IFiltering {
+public class SearchFragment extends Fragment implements TextWatcher, Filter.FilterListener {
 
 	private static final String TAG = SearchFragment.class.getSimpleName();
 	private static final String SEARCH_TOKEN = "search_token";
@@ -43,11 +44,17 @@ public class SearchFragment extends Fragment implements TextWatcher, BaseQuestio
 	@InjectView(R.id.hint_search_token) FloatLabeledEditText mHint;
 	@InjectView(R.id.search_token) EditText mSearchToken;
 
-	DBAdapter mDBAdapter = null;
+	List<Question> mQuestions;
 
+	DBAdapter mDBAdapter = null;
 
 	BaseQuestionAdapter mAdapter;
 	private String mSearchTokenStr;
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,31 +75,29 @@ public class SearchFragment extends Fragment implements TextWatcher, BaseQuestio
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		mDBAdapter = new DBAdapter(getActivity());
+		mDBAdapter = DBAdapter.getInstance(getActivity());
 		try {
 			mDBAdapter.createDataBase();
 		} catch (IOException e) {
 			Log.e(TAG, "Database haven't created!");
 		}
 
-		List<Question> questions = mDBAdapter.getAllQuestions();
+		mQuestions = mDBAdapter.getAllQuestions();
+
+		mAdapter = new BaseQuestionAdapter(getActivity(), mQuestions);
 
 		mRecyclerView.setHasFixedSize(true);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		mRecyclerView.setLayoutManager(llm);
 
-		mAdapter = new BaseQuestionAdapter(getActivity(), questions);
-		mAdapter.setFilterListener(this);
-//		mAdapter.setOnItemClickListener(this);
-
-		mRecyclerView.setAdapter(mAdapter);
-
 		if (savedInstanceState != null) {
 			mSearchTokenStr = savedInstanceState.getString(SEARCH_TOKEN);
-			mAdapter.getFilter().filter(mSearchTokenStr);
+			mAdapter.getFilter().filter(mSearchTokenStr, this);
 		}
 
+//		mAdapter.setOnItemClickListener(this);
+		mRecyclerView.setAdapter(mAdapter);
 		mSearchToken.addTextChangedListener(this);
 	}
 
@@ -115,9 +120,9 @@ public class SearchFragment extends Fragment implements TextWatcher, BaseQuestio
 	}
 
 	private void doSearch() {
-		if (mSearchToken != null && mSearchToken.length() > 0) {
-			mSearchTokenStr = mSearchToken.getText().toString();
-			mAdapter.getFilter().filter(mSearchTokenStr);
+		if (mSearchToken != null /*&& mSearchToken.length() > 0*/) {
+			mSearchTokenStr = mSearchToken.getText().toString().trim().toLowerCase();
+			mAdapter.getFilter().filter(mSearchTokenStr, this);
 		} else {
 			mAdapter.refresh();
 		}
@@ -157,10 +162,11 @@ public class SearchFragment extends Fragment implements TextWatcher, BaseQuestio
 	}
 
 	@Override
-	public void onFinished(int count) {
+	public void onFilterComplete(int count) {
+		Log.d(TAG, "Count: " + count);
 		if (count == 4007) {
-	 	    mHint.setHint(getString(R.string.write_question_hint));
-	 	} else {
+			mHint.setHint(getString(R.string.write_question_hint));
+		} else {
 			mHint.setHint("Found: " + count);
 		}
 	}

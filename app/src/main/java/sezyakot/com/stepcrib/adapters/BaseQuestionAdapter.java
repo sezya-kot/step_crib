@@ -29,20 +29,7 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 	private List<Question> mOriginList;
 	protected OnItemClickListener mListener;
 	private Filter mFilter;
-	protected IFiltering mFilterListener;
 
-	public void setFilterListener(IFiltering listener) {
-		if (listener instanceof IFiltering) {
-			mFilterListener = (IFiltering) listener;
-		} else {
-			throw new InstantiationError();
-		}
-	}
-
-	public interface IFiltering {
-
-		public void onFinished(int count);
-	}
 
 	@Override
 	public Filter getFilter() {
@@ -54,7 +41,6 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 
 	public void refresh() {
 		mList = new ArrayList<>(mOriginList);
-		if (mFilterListener != null) mFilterListener.onFinished(mList.size());
 		notifyDataSetChanged();
 	}
 
@@ -90,11 +76,11 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 		holder.answer.setText(mCtx.getString(R.string.answer) + answer);
 	}
 
-	public void setData(List<Question> list) {
-		mList = list;
-		mOriginList = list;
-		notifyDataSetChanged();
-	}
+//	public void setData(List<Question> list) {
+//		mList = list;
+//		mOriginList = list;
+//		notifyDataSetChanged();
+//	}
 
 	@Override
 	public int getItemCount() {
@@ -175,7 +161,6 @@ public class BaseQuestionAdapter extends RecyclerView.Adapter<BaseQuestionAdapte
 			if (results != null && results.values != null) {
 				mList.clear();
 				mList.addAll((List<? extends Question>) results.values);
-				mFilterListener.onFinished(results.count);
 				notifyDataSetChanged();
 			}
 		}
