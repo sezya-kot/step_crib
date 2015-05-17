@@ -40,9 +40,12 @@ public class SearchFragment extends Fragment implements TextWatcher, Filter.Filt
 
 	private static final String TAG = SearchFragment.class.getSimpleName();
 	private static final String SEARCH_TOKEN = "search_token";
-	@InjectView(R.id.questions) RecyclerView mRecyclerView;
-	@InjectView(R.id.hint_search_token) FloatLabeledEditText mHint;
-	@InjectView(R.id.search_token) EditText mSearchToken;
+	@InjectView(R.id.questions)
+	RecyclerView mRecyclerView;
+	@InjectView(R.id.hint_search_token)
+	FloatLabeledEditText mHint;
+	@InjectView(R.id.search_token)
+	EditText mSearchToken;
 
 	List<Question> mQuestions;
 
@@ -109,13 +112,10 @@ public class SearchFragment extends Fragment implements TextWatcher, Filter.Filt
 
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-		Log.d(TAG, "beforeTextChanged(): " + s);
-
 	}
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		Log.d(TAG, "onTextChanged(): " + s);
 		doSearch();
 	}
 
@@ -130,7 +130,6 @@ public class SearchFragment extends Fragment implements TextWatcher, Filter.Filt
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		Log.d(TAG, "afterTextChanged(): " + s);
 	}
 
 	@Override
@@ -154,7 +153,7 @@ public class SearchFragment extends Fragment implements TextWatcher, Filter.Filt
 		if (item.getItemId() == R.id.hide_keyboard) {
 			if (getActivity().getCurrentFocus() != null) {
 				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+				imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 			}
 		}
 
@@ -167,7 +166,8 @@ public class SearchFragment extends Fragment implements TextWatcher, Filter.Filt
 		if (count == 4007) {
 			mHint.setHint(getString(R.string.write_question_hint));
 		} else {
-			mHint.setHint("Found: " + count);
+			mHint.setHint(getString(R.string.found_) + count);
+			
 		}
 	}
 }

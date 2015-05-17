@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">Крок шпора</string>
+    <string name="app_name">КРОК Помічник</string>
 
     <string name="action_settings">Налаштування</string>
     <string name="write_question_hint">Ваше питання</string>
     <string name="answer">"Відповідь: "</string>
+    <string name="found_">"Знайдено: "</string>
+    <string name="clear">Очистити</string>
+    <string name="hide_keyboard">Сховати клаву</string>
+    <string name="love_activity">Кохання...</string>
 </resources>

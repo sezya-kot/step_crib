@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">Шаг шпора</string>
+    <string name="app_name">КРОК Помошник</string>
 
     <string name="action_settings">Настройки</string>
     <string name="write_question_hint">Ваш вопрос</string>
     <string name="answer">"Ответ: "</string>
+    <string name="found_">"Найдено: "</string>
+    <string name="clear">Очистить</string>
+    <string name="hide_keyboard">Спрятать клавиатуру</string>
+    <string name="love_activity">Любовь...</string>
 </resources>

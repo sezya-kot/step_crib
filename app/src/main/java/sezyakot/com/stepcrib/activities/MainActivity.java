@@ -1,19 +1,17 @@
 package sezyakot.com.stepcrib.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
 import sezyakot.com.stepcrib.R;
-import sezyakot.com.stepcrib.adapters.BaseQuestionAdapter;
 import sezyakot.com.stepcrib.fragments.SearchFragment;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
 	public final String TAG = getClass().getSimpleName();
 
@@ -24,7 +22,18 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+		toolbar.findViewById(R.id.main_menu).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(MainActivity.this, LoveActivity.class);
+				startActivity(i);
+			}
+		});
+
 		setSupportActionBar(toolbar);
+		getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+		getSupportActionBar().setTitle(null);
+		getSupportActionBar().setHomeButtonEnabled(true);
 
 		Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
@@ -35,32 +44,5 @@ public class MainActivity extends ActionBarActivity {
 				.add(R.id.fragment_container, fragment)
 				.commit();
 		}
-
-//		DatabaseAdapter dbAdapter = new DatabaseAdapter(this);
-//
-//		Cursor cursor = dbAdapter.getAllRowsSubjects();
-//		String l;
-//		while (cursor.moveToNext()) {
-//			l = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.SUBJ_NAME));
-//			Log.d(TAG, DatabaseAdapter.SUBJ_NAME + " is " + l);
-//		}
 	}
-
-
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.menu_main, menu);
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		// Handle action bar item clicks here. The action bar will
-//		// automatically handle clicks on the Home/Up button, so long
-//		// as you specify a parent activity in AndroidManifest.xml.
-//
-//
-//		return super.onOptionsItemSelected(item);
-//	}
 }
